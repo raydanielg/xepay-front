@@ -2,7 +2,6 @@
 
 import * as React from "react"
 
-import { NavDocuments } from "@workspace/ui/components/nav-documents"
 import { NavMain } from "@workspace/ui/components/nav-main"
 import { NavSecondary } from "@workspace/ui/components/nav-secondary"
 import { NavUser } from "@workspace/ui/components/nav-user"
@@ -15,7 +14,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@workspace/ui/components/sidebar"
-import { IconDashboard, IconChartBar, IconUsers, IconCamera, IconFileDescription, IconFileAi, IconSettings, IconHelp, IconSearch, IconDatabase, IconReport, IconFileWord, IconInnerShadowTop } from "@tabler/icons-react"
+import { IconDashboard, IconChartBar, IconUsers, IconSettings, IconHelp, IconSearch, IconInnerShadowTop, IconWallet, IconReceipt, IconArrowsRightLeft } from "@tabler/icons-react"
 
 const data = {
   user: {
@@ -33,10 +32,34 @@ const data = {
       ),
     },
     {
+      title: "Transactions",
+      url: "/dashboard/transactions",
+      icon: (
+        <IconArrowsRightLeft
+        />
+      ),
+    },
+    {
       title: "Analytics",
       url: "/dashboard/analytics",
       icon: (
         <IconChartBar
+        />
+      ),
+    },
+    {
+      title: "Wallet",
+      url: "/dashboard/wallet",
+      icon: (
+        <IconWallet
+        />
+      ),
+    },
+    {
+      title: "Invoices",
+      url: "/dashboard/invoices",
+      icon: (
+        <IconReceipt
         />
       ),
     },
@@ -49,67 +72,10 @@ const data = {
       ),
     },
   ],
-  navClouds: [
-    {
-      title: "Capture",
-      icon: (
-        <IconCamera
-        />
-      ),
-      isActive: true,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Proposal",
-      icon: (
-        <IconFileDescription
-        />
-      ),
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Prompts",
-      icon: (
-        <IconFileAi
-        />
-      ),
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-  ],
   navSecondary: [
     {
       title: "Settings",
-      url: "#",
+      url: "/dashboard/settings",
       icon: (
         <IconSettings
         />
@@ -132,32 +98,7 @@ const data = {
       ),
     },
   ],
-  documents: [
-    {
-      name: "Data Library",
-      url: "#",
-      icon: (
-        <IconDatabase
-        />
-      ),
-    },
-    {
-      name: "Reports",
-      url: "#",
-      icon: (
-        <IconReport
-        />
-      ),
-    },
-    {
-      name: "Word Assistant",
-      url: "#",
-      icon: (
-        <IconFileWord
-        />
-      ),
-    },
-  ],
+  documents: [],
 }
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -177,7 +118,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavDocuments items={data.documents} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
