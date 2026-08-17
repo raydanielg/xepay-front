@@ -1,15 +1,32 @@
-import { Geist, Geist_Mono, Noto_Sans } from "next/font/google"
+import { Inter, Geist_Mono, Noto_Sans } from "next/font/google"
 
 import "@workspace/ui/globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
+import { Toaster } from "@workspace/ui/components/sonner"
 import { cn } from "@workspace/ui/lib/utils";
 
-const notoSans = Noto_Sans({subsets:['latin'],variable:'--font-sans'})
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+})
+
+const notoSans = Noto_Sans({ subsets: ["latin"], variable: "--font-noto" })
 
 const fontMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
 })
+
+export const metadata = {
+  title: "XerinPay",
+  description: "XerinPay - Secure payment platform",
+  icons: {
+    icon: "/favicon.png",
+    apple: "/favicon.png",
+    shortcut: "/favicon.png",
+  },
+}
 
 export default function RootLayout({
   children,
@@ -20,10 +37,14 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("antialiased", fontMono.variable, "font-sans", notoSans.variable)}
+      data-scroll-behavior="smooth"
+      className={cn("antialiased", inter.variable, notoSans.variable, fontMono.variable)}
     >
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          {children}
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   )
