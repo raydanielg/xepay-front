@@ -1,17 +1,19 @@
 import type { Metadata } from "next"
 
+import { AnimatedBackground } from "@/components/marketing/animated-background"
+import { SiteFooter } from "@/components/marketing/site-footer"
 import { SiteHeader } from "@/components/marketing/site-header"
 import {
+  Aggregation,
   CallToAction,
   Developers,
   Faq,
   Features,
+  ForCustomers,
   Hero,
   HowItWorks,
   Networks,
   Pricing,
-  SiteFooter,
-  Stats,
 } from "@/components/marketing/sections"
 
 export const metadata: Metadata = {
@@ -30,12 +32,14 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <>
+      <AnimatedBackground />
       <SiteHeader />
-      <main>
+      <main id="main" tabIndex={-1} className="outline-none">
         <Hero />
         <Networks />
-        <Stats />
         <Features />
+        <Aggregation />
+        <ForCustomers />
         <HowItWorks />
         <Developers />
         <Pricing />

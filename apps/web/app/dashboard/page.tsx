@@ -244,7 +244,7 @@ function GoLiveBanner({ kycStatus }: { kycStatus: string }) {
       },
     }
 
-  const step = steps[kycStatus] ?? steps.not_started
+  const step = steps[kycStatus] ?? steps.not_started!
 
   return (
     <Card className="border-primary/20 bg-primary/5">
@@ -254,17 +254,13 @@ function GoLiveBanner({ kycStatus }: { kycStatus: string }) {
           <p className="text-muted-foreground mt-0.5 text-sm">{step.body}</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" asChild>
-            <Link href="/docs">
-              <IconBook2 className="size-4" />
-              Docs
-            </Link>
+          <Button variant="outline" size="sm" render={<Link href="/docs" />}>
+            <IconBook2 className="size-4" />
+            Docs
           </Button>
-          <Button size="sm" asChild>
-            <Link href={step.href}>
-              {step.cta}
-              <IconArrowRight className="size-4" />
-            </Link>
+          <Button size="sm" render={<Link href={step.href} />}>
+            {step.cta}
+            <IconArrowRight className="size-4" />
           </Button>
         </div>
       </CardContent>
@@ -283,11 +279,9 @@ function RecentActivity({
     <Card>
       <CardHeader className="flex-row items-center justify-between">
         <CardTitle className="text-base">Recent activity</CardTitle>
-        <Button variant="ghost" size="sm" asChild>
-          <Link href="/dashboard/transactions">
-            View all
-            <IconExternalLink className="size-3.5" />
-          </Link>
+        <Button variant="ghost" size="sm" render={<Link href="/dashboard/transactions" />}>
+          View all
+          <IconExternalLink className="size-3.5" />
         </Button>
       </CardHeader>
       <CardContent>

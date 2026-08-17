@@ -142,10 +142,8 @@ function PaymentLinksView() {
                         >
                           <IconCopy className="size-3.5" />
                         </Button>
-                        <Button size="icon" variant="ghost" className="size-7" asChild>
-                          <a href={link.url} target="_blank" rel="noopener noreferrer">
-                            <IconExternalLink className="size-3.5" />
-                          </a>
+                        <Button size="icon" variant="ghost" className="size-7" render={<a href={link.url} target="_blank" rel="noopener noreferrer" />}>
+                          <IconExternalLink className="size-3.5" />
                         </Button>
                       </div>
                     </TableCell>

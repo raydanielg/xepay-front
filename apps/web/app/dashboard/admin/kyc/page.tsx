@@ -268,14 +268,8 @@ function ReviewDialog({
                       </p>
                     </div>
                     {doc.url ? (
-                      <Button size="sm" variant="outline" asChild>
-                        <a
-                          href={doc.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          Open
-                        </a>
+                      <Button size="sm" variant="outline" render={<a href={doc.url} target="_blank" rel="noopener noreferrer" />}>
+                        Open
                       </Button>
                     ) : (
                       <span className="text-muted-foreground text-xs">

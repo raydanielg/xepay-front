@@ -2,12 +2,14 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import {
   IconArrowRight,
   IconBolt,
   IconBook2,
   IconBuildingBank,
   IconChartBar,
+  IconCheck,
   IconChevronDown,
   IconCode,
   IconDeviceMobile,
@@ -21,84 +23,207 @@ import {
 import { Button } from "@workspace/ui/components/button"
 import { cn } from "@workspace/ui/lib/utils"
 
-import { CountUp, GradientField, Marquee, Reveal } from "@/components/marketing/motion"
-import { PaymentFlow } from "@/components/marketing/payment-flow"
+import { SectionGlow } from "@/components/marketing/animated-background"
+import { Marquee, Reveal, VerticalMarquee } from "@/components/marketing/motion"
+import { Layer, NetworkOrbit, Tilt } from "@/components/marketing/three-d"
+import { Typewriter } from "@/components/marketing/typewriter"
 
-const NETWORKS = [
-  "M-Pesa",
-  "Mixx by Yas",
-  "Airtel Money",
-  "HaloPesa",
-  "AzamPesa",
-  "CRDB",
-  "NMB",
-  "NBC",
+/**
+ * Mobile money, by the network that runs it.
+ *
+ * Only mobile network operators belong here. AzamPesa was previously in this
+ * list and should not have been — it is a wallet run by Azam Group, not an
+ * MNO, and it has no MSISDN range of its own. Listing it beside M-Pesa
+ * implied we detect it from a phone prefix, which is not something you can
+ * do. Kept out rather than quietly mislabelled.
+ */
+const MOBILE_NETWORKS = [
+  { name: "M-Pesa", operator: "Vodacom" },
+  { name: "Mixx by Yas", operator: "Yas" },
+  { name: "Airtel Money", operator: "Airtel" },
+  { name: "HaloPesa", operator: "Halotel" },
+  { name: "T-Pesa", operator: "TTCL" },
+]
+
+const BANKS = [
+  { name: "CRDB", operator: "Bank" },
+  { name: "NMB", operator: "Bank" },
+  { name: "NBC", operator: "Bank" },
+  { name: "Exim", operator: "Bank" },
+  { name: "Stanbic", operator: "Bank" },
+  { name: "Absa", operator: "Bank" },
+]
+
+const ALL_CHANNELS = [...MOBILE_NETWORKS, ...BANKS]
+
+/**
+ * Hero phrases, each finishing the sentence "Get paid …".
+ *
+ * Every one is an outcome the merchant gets, not a capability we have. They
+ * are ordered to answer the questions a business owner asks in the order
+ * they ask them: can everyone pay me, will I lose sales, when do I see the
+ * money, how soon can I start, and do I need a developer.
+ *
+ * Kept short so the typing never outlasts the reader's patience.
+ */
+const HERO_PHRASES = [
+  "by every customer.",
+  "even when a network fails.",
+  "into your bank in two days.",
+  "starting this afternoon.",
+  "without writing any code.",
 ]
 
 // --------------------------------------------------------------------------
-// Hero
+// Hero — centred, with the product photo as the anchor
 // --------------------------------------------------------------------------
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden pt-32 pb-20 sm:pt-40 sm:pb-28">
-      <GradientField />
-
-      <div className="relative mx-auto max-w-6xl px-4">
-        <div className="grid items-center gap-12 lg:grid-cols-2">
-          <div>
-            <Reveal>
-              <span className="border-primary/20 bg-primary/5 text-primary inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium">
-                <IconBolt className="size-3.5" />
-                Built for Tanzania
-              </span>
-            </Reveal>
-
-            <Reveal delay={80}>
-              <h1 className="mt-6 text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
-                Every payment network.{" "}
-                <span className="text-primary">One integration.</span>
-              </h1>
-            </Reveal>
-
-            <Reveal delay={160}>
-              <p className="text-muted-foreground mt-6 max-w-lg text-lg">
-                M-Pesa, Mixx by Yas, Airtel Money, HaloPesa, AzamPesa and the
-                banks — through a single API and one dashboard. Stop
-                integrating each provider separately.
-              </p>
-            </Reveal>
-
-            <Reveal delay={240}>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Button size="lg" asChild>
-                  <Link href="/auth/register">
-                    Anza bure
-                    <IconArrowRight className="size-4" />
-                  </Link>
-                </Button>
-                <Button size="lg" variant="outline" asChild>
-                  <Link href="/docs">
-                    <IconBook2 className="size-4" />
-                    Read the docs
-                  </Link>
-                </Button>
-              </div>
-            </Reveal>
-
-            <Reveal delay={320}>
-              <p className="text-muted-foreground mt-6 text-sm">
-                Free to start · Sandbox from day one · No monthly fee
-              </p>
-            </Reveal>
-          </div>
-
-          <Reveal direction="left" delay={200} className="flex justify-center lg:justify-end">
-            <PaymentFlow />
+    <section className="relative pt-32 pb-16 sm:pt-40">
+      <div className="mx-auto max-w-6xl px-4">
+        <div className="mx-auto max-w-3xl text-center">
+          <Reveal>
+            <span className="border-primary/20 bg-primary/5 text-primary inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-medium backdrop-blur">
+              <IconBolt className="size-3.5" />
+              Built for Tanzania
+            </span>
           </Reveal>
+
+          <Reveal delay={80}>
+            {/*
+              Benefit-first, not feature-first. "Every payment network, one
+              integration" describes what we built; "get paid by every
+              customer" describes what the merchant gets — and that is the
+              thing they are actually deciding about.
+
+              min-h reserves the tallest line so the paragraph below does not
+              jump each time the phrase changes length.
+            */}
+            <h1 className="mt-6 text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
+              Get paid
+              <br />
+              <span className="text-primary inline-flex min-h-[1.25em] items-center justify-center">
+                <Typewriter phrases={HERO_PHRASES} />
+              </span>
+            </h1>
+          </Reveal>
+
+          <Reveal delay={160}>
+            <p className="text-muted-foreground mx-auto mt-6 max-w-xl text-lg">
+              Your customers pay from whichever wallet they already use. You
+              see one dashboard, get one settlement, and never chase a
+              provider again.
+            </p>
+          </Reveal>
+
+          <Reveal delay={240}>
+            <div className="mt-9 flex flex-wrap justify-center gap-3">
+              <Button size="lg" render={<Link href="/auth/register" />}>
+                Get started free
+                <IconArrowRight />
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                render={<Link href="/docs" />}
+              >
+                <IconBook2 />
+                Read the docs
+              </Button>
+            </div>
+          </Reveal>
+
+          <Reveal delay={320}>
+            <p className="text-muted-foreground mt-6 text-sm">
+              Free to start · Sandbox from day one · No monthly fee
+            </p>
+          </Reveal>
+        </div>
+
+        {/*
+          Hero subject. A cut-out PNG on a transparent background, so it sits
+          directly on the animated backdrop with no card, border or frame
+          around it — the figure reads as part of the page rather than as a
+          screenshot pasted onto it.
+
+          The soft radial glow behind it does the work a card border used to:
+          it separates the subject from the background without drawing a box.
+        */}
+        <div
+          className="relative mx-auto mt-14 flex max-w-3xl justify-center"
+          style={{ animation: "xerin-rise 900ms cubic-bezier(0.16,1,0.3,1) both" }}
+        >
+          <div
+            aria-hidden
+            className="absolute inset-x-8 bottom-8 top-4 rounded-full opacity-70 blur-3xl"
+            style={{
+              background:
+                "radial-gradient(ellipse at 50% 55%, var(--primary) 0%, transparent 68%)",
+              opacity: 0.22,
+            }}
+          />
+
+          <Tilt maxDeg={6} scale={1.01} glare={false} className="relative">
+            <Image
+              src="/assets/ss.png"
+              alt="A customer paying with her phone"
+              width={760}
+              height={760}
+              priority
+              sizes="(max-width: 768px) 88vw, 520px"
+              className="relative h-auto w-full max-w-md drop-shadow-2xl"
+            />
+
+            {/* Lifted off the subject's plane so they gain real parallax as
+                it tilts, rather than sliding around flat on top of it. */}
+            <Layer depth={70}>
+              <FloatingChip
+                className="left-0 top-1/4 sm:-left-12"
+                label="Received"
+                value="TZS 100,000"
+                delay={0}
+              />
+            </Layer>
+            <Layer depth={95}>
+              <FloatingChip
+                className="right-0 bottom-1/3 sm:-right-12"
+                label="Settled to bank"
+                value="T+2"
+                delay={-4}
+              />
+            </Layer>
+          </Tilt>
         </div>
       </div>
     </section>
+  )
+}
+
+function FloatingChip({
+  className,
+  label,
+  value,
+  delay,
+}: {
+  className?: string
+  label: string
+  value: string
+  delay: number
+}) {
+  return (
+    <div
+      className={cn(
+        "bg-card/90 absolute hidden rounded-xl border px-3.5 py-2.5 shadow-lg backdrop-blur sm:block",
+        className,
+      )}
+      style={{ animation: `xerin-drift 9s ease-in-out ${delay}s infinite` }}
+    >
+      <p className="text-muted-foreground text-[10px] uppercase tracking-wide">
+        {label}
+      </p>
+      <p className="text-sm font-semibold tabular-nums">{value}</p>
+    </div>
   )
 }
 
@@ -108,73 +233,23 @@ export function Hero() {
 
 export function Networks() {
   return (
-    <section className="border-y py-10">
+    <section className="bg-background/60 border-y py-10 backdrop-blur">
       <div className="mx-auto max-w-6xl px-4">
         <p className="text-muted-foreground mb-6 text-center text-xs font-medium uppercase tracking-wide">
           One integration reaches all of these
         </p>
         <Marquee speed={38}>
-          {NETWORKS.map((name) => (
+          {ALL_CHANNELS.map((channel) => (
             <span
-              key={name}
+              key={channel.name}
               className="text-muted-foreground/70 hover:text-foreground shrink-0 text-lg font-semibold tracking-tight transition-colors"
             >
-              {name}
+              {channel.name}
             </span>
           ))}
         </Marquee>
       </div>
     </section>
-  )
-}
-
-// --------------------------------------------------------------------------
-// Stats
-// --------------------------------------------------------------------------
-
-export function Stats() {
-  return (
-    <section className="py-16">
-      <div className="mx-auto max-w-6xl px-4">
-        <div className="grid gap-8 sm:grid-cols-3">
-          <Stat
-            value={<CountUp to={5} suffix="+" />}
-            label="Mobile money networks"
-            detail="Plus the major banks, through one API"
-          />
-          <Stat
-            value={<CountUp to={15} suffix=" min" />}
-            label="Payment window"
-            detail="With automatic status polling when callbacks are lost"
-          />
-          <Stat
-            value={<CountUp to={7} />}
-            label="Webhook retries"
-            detail="Over 24 hours, with jitter — we do not give up early"
-          />
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function Stat({
-  value,
-  label,
-  detail,
-}: {
-  value: React.ReactNode
-  label: string
-  detail: string
-}) {
-  return (
-    <Reveal className="text-center">
-      <p className="text-primary text-4xl font-semibold tracking-tight">
-        {value}
-      </p>
-      <p className="mt-2 font-medium">{label}</p>
-      <p className="text-muted-foreground mt-1 text-sm">{detail}</p>
-    </Reveal>
   )
 }
 
@@ -227,23 +302,24 @@ const FEATURES = [
 
 export function Features() {
   return (
-    <section id="features" className="scroll-mt-20 py-20">
-      <div className="mx-auto max-w-6xl px-4">
+    <section id="features" className="relative scroll-mt-20 py-20">
+      <SectionGlow />
+      <div className="relative mx-auto max-w-6xl px-4">
         <Reveal className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            Everything a payment system needs
+            What you stop worrying about
           </h2>
           <p className="text-muted-foreground mt-4 text-lg">
-            Not a wrapper around one provider. A real aggregator, built for
-            networks that drop.
+            Chasing providers, reconciling by hand, wondering whether a
+            payment landed. All of it becomes our problem.
           </p>
         </Reveal>
 
         <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {FEATURES.map((feature, index) => (
             <Reveal key={feature.title} delay={(index % 4) * 70}>
-              <div className="group hover:border-primary/30 h-full rounded-2xl border p-5 transition-all duration-300 hover:shadow-lg">
-                <div className="bg-primary/10 text-primary flex size-10 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110">
+              <div className="group bg-card/60 hover:border-primary/30 h-full rounded-2xl border p-5 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+                <div className="bg-primary/10 text-primary flex size-11 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110">
                   <feature.icon className="size-5" />
                 </div>
                 <h3 className="mt-4 font-semibold">{feature.title}</h3>
@@ -256,6 +332,171 @@ export function Features() {
         </div>
       </div>
     </section>
+  )
+}
+
+// --------------------------------------------------------------------------
+// Built for real customers — image + copy
+// --------------------------------------------------------------------------
+
+export function ForCustomers() {
+  return (
+    <section className="relative py-20">
+      <div className="mx-auto max-w-6xl px-4">
+        <div className="grid items-center gap-12 lg:grid-cols-2">
+          {/*
+            The 3D orbit rather than a third photo. Only two photographs
+            exist in the project, and repeating one across sections reads as
+            padding. This also earns its place here: the section is about
+            reaching whichever wallet the customer already has, and the orbit
+            shows exactly that.
+          */}
+          <Reveal direction="right">
+            <NetworkOrbit />
+          </Reveal>
+
+          <Reveal direction="left" delay={120}>
+            <span className="text-primary text-sm font-medium">
+              Built for how people actually pay
+            </span>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+              A checkout that works on any phone
+            </h2>
+            <p className="text-muted-foreground mt-4 text-lg">
+              Your customers are on cheap handsets and weak 3G. Our hosted
+              checkout is server-rendered, under 100KB, and available in
+              Swahili and English.
+            </p>
+
+            <ul className="mt-7 space-y-4">
+              {[
+                {
+                  title: "Three steps, nothing more",
+                  body: "Pick a network, enter a number, confirm. We detect the network from the number, so most people never touch the picker.",
+                },
+                {
+                  title: "Clear instructions at the right moment",
+                  body: "“Check your phone and enter your M-Pesa PIN” — in their language, at the exact moment they need it.",
+                },
+                {
+                  title: "No tracking, no third-party scripts",
+                  body: "A payment page has no business carrying analytics. Nothing loads that the payment does not need.",
+                },
+              ].map((item) => (
+                <li key={item.title} className="flex gap-3">
+                  <span className="bg-primary/10 text-primary mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full">
+                    <IconCheck className="size-3" />
+                  </span>
+                  <div>
+                    <p className="text-sm font-medium">{item.title}</p>
+                    <p className="text-muted-foreground mt-1 text-sm">
+                      {item.body}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// --------------------------------------------------------------------------
+// The aggregator idea, in 3D
+// --------------------------------------------------------------------------
+
+export function Aggregation() {
+  return (
+    <section className="relative overflow-hidden py-24">
+      <SectionGlow />
+      <div className="relative mx-auto max-w-6xl px-4">
+        <div className="grid items-center gap-16 lg:grid-cols-2">
+          <Reveal direction="right">
+            <span className="text-primary text-sm font-medium">
+              One connection, not five
+            </span>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+              Integrate once. Reach everyone.
+            </h2>
+            <p className="text-muted-foreground mt-4 text-lg">
+              Each provider has its own authentication, its own error codes,
+              its own idea of what a phone number looks like. We absorb all of
+              that so your code sees one shape.
+            </p>
+
+            <Tilt maxDeg={8} scale={1.01} className="mt-8 rounded-2xl">
+              <div className="bg-card relative overflow-hidden rounded-2xl border shadow-xl">
+                <Image
+                  src="/assets/img.png"
+                  alt="A completed payment confirmation on a phone"
+                  width={1536}
+                  height={1024}
+                  sizes="(max-width: 1024px) 90vw, 520px"
+                  className="h-auto w-full"
+                />
+              </div>
+            </Tilt>
+          </Reveal>
+
+          {/*
+            Two columns scrolling in opposite directions. Mobile money and
+            banks are kept apart on purpose — they are genuinely different
+            rails with different settlement behaviour, and lumping them into
+            one list implies a uniformity that does not exist.
+          */}
+          <Reveal direction="left" delay={140}>
+            <div className="grid h-[26rem] grid-cols-2 gap-3">
+              <ChannelColumn
+                heading="Mobile money"
+                items={MOBILE_NETWORKS}
+                speed={22}
+              />
+              <ChannelColumn
+                heading="Banks"
+                items={BANKS}
+                speed={28}
+                reverse
+              />
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function ChannelColumn({
+  heading,
+  items,
+  speed,
+  reverse,
+}: {
+  heading: string
+  items: { name: string; operator: string }[]
+  speed: number
+  reverse?: boolean
+}) {
+  return (
+    <div className="flex min-h-0 flex-col">
+      <p className="text-muted-foreground mb-3 text-xs font-semibold uppercase tracking-wide">
+        {heading}
+      </p>
+      <VerticalMarquee speed={speed} reverse={reverse} className="flex-1">
+        {items.map((item) => (
+          <div
+            key={item.name}
+            className="bg-card/70 hover:border-primary/40 rounded-xl border p-3.5 backdrop-blur transition-colors"
+          >
+            <p className="text-sm font-semibold tracking-tight">{item.name}</p>
+            <p className="text-muted-foreground mt-0.5 text-xs">
+              {item.operator}
+            </p>
+          </div>
+        ))}
+      </VerticalMarquee>
+    </div>
   )
 }
 
@@ -283,7 +524,10 @@ const STEPS = [
 
 export function HowItWorks() {
   return (
-    <section id="how" className="bg-muted/30 scroll-mt-20 border-y py-20">
+    <section
+      id="how"
+      className="bg-muted/40 relative scroll-mt-20 border-y py-20 backdrop-blur"
+    >
       <div className="mx-auto max-w-6xl px-4">
         <Reveal className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
@@ -302,11 +546,11 @@ export function HowItWorks() {
                 {index < STEPS.length - 1 ? (
                   <div
                     aria-hidden
-                    className="from-primary/40 absolute left-full top-8 hidden h-px w-6 bg-gradient-to-r to-transparent md:block"
+                    className="from-primary/50 absolute left-full top-10 hidden h-px w-6 bg-gradient-to-r to-transparent md:block"
                   />
                 ) : null}
-                <div className="bg-card h-full rounded-2xl border p-6">
-                  <span className="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-full text-sm font-semibold">
+                <div className="bg-card hover:border-primary/30 h-full rounded-2xl border p-6 transition-colors">
+                  <span className="bg-primary text-primary-foreground flex size-9 items-center justify-center rounded-full font-semibold">
                     {index + 1}
                   </span>
                   <h3 className="mt-4 font-semibold">{step.title}</h3>
@@ -377,8 +621,9 @@ export function Developers() {
   const [language, setLanguage] = useState<SnippetId>("node")
 
   return (
-    <section id="developers" className="scroll-mt-20 py-20">
-      <div className="mx-auto max-w-6xl px-4">
+    <section id="developers" className="relative scroll-mt-20 py-20">
+      <SectionGlow />
+      <div className="relative mx-auto max-w-6xl px-4">
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <Reveal>
             <span className="text-primary text-sm font-medium">
@@ -400,25 +645,36 @@ export function Developers() {
                 "Live playground inside the docs",
               ].map((item) => (
                 <li key={item} className="flex items-start gap-2.5 text-sm">
-                  <span className="bg-primary/10 text-primary mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full text-[10px]">
-                    ✓
+                  <span className="bg-primary/10 text-primary mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full">
+                    <IconCheck className="size-2.5" />
                   </span>
                   {item}
                 </li>
               ))}
             </ul>
 
-            <Button className="mt-8" asChild>
-              <Link href="/docs/quickstart">
-                <IconCode className="size-4" />
-                Start building
-              </Link>
+            <Button
+              size="lg"
+              className="mt-8"
+              render={<Link href="/docs/quickstart" />}
+            >
+              <IconCode />
+              Start building
             </Button>
           </Reveal>
 
           <Reveal direction="left" delay={120}>
             <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#0d1117] shadow-2xl">
-              <div className="flex items-center gap-1 border-b border-white/10 px-3 py-2">
+              <div className="flex items-center gap-1 border-b border-white/10 px-3 py-2.5">
+                <div className="mr-2 flex gap-1.5">
+                  {["#ff5f57", "#febc2e", "#28c840"].map((colour) => (
+                    <span
+                      key={colour}
+                      className="size-2.5 rounded-full"
+                      style={{ backgroundColor: colour }}
+                    />
+                  ))}
+                </div>
                 {(Object.keys(SNIPPETS) as SnippetId[]).map((id) => (
                   <button
                     key={id}
@@ -454,7 +710,10 @@ export function Developers() {
 
 export function Pricing() {
   return (
-    <section id="pricing" className="bg-muted/30 scroll-mt-20 border-y py-20">
+    <section
+      id="pricing"
+      className="bg-muted/40 scroll-mt-20 border-y py-20 backdrop-blur"
+    >
       <div className="mx-auto max-w-6xl px-4">
         <Reveal className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
@@ -477,15 +736,15 @@ export function Pricing() {
                 Charged only on payments that actually succeed. Failed
                 attempts cost you nothing.
               </p>
-              <ul className="mt-5 space-y-2 text-sm">
+              <ul className="mt-5 space-y-2.5 text-sm">
                 {[
                   "All mobile money networks",
                   "Bank transfers",
                   "Payment links and hosted checkout",
                   "Unlimited API keys and webhooks",
                 ].map((item) => (
-                  <li key={item} className="flex gap-2">
-                    <span className="text-primary">✓</span>
+                  <li key={item} className="flex items-center gap-2">
+                    <IconCheck className="text-primary size-4 shrink-0" />
                     {item}
                   </li>
                 ))}
@@ -494,8 +753,8 @@ export function Pricing() {
           </Reveal>
 
           <Reveal delay={100}>
-            <div className="border-primary/30 bg-card relative h-full rounded-2xl border p-6">
-              <span className="bg-primary text-primary-foreground absolute -top-2.5 right-5 rounded-full px-2.5 py-0.5 text-xs font-medium">
+            <div className="border-primary/40 bg-card relative h-full rounded-2xl border-2 p-6 shadow-lg">
+              <span className="bg-primary text-primary-foreground absolute -top-3 right-5 rounded-full px-3 py-0.5 text-xs font-medium">
                 Talk to us
               </span>
               <p className="font-semibold">High volume</p>
@@ -506,15 +765,15 @@ export function Pricing() {
                 Moving serious volume? Rates come down, and you get a named
                 contact rather than a queue.
               </p>
-              <ul className="mt-5 space-y-2 text-sm">
+              <ul className="mt-5 space-y-2.5 text-sm">
                 {[
                   "Negotiated per-transaction pricing",
                   "Faster settlement schedule",
                   "Custom provider routing rules",
                   "Priority support",
                 ].map((item) => (
-                  <li key={item} className="flex gap-2">
-                    <span className="text-primary">✓</span>
+                  <li key={item} className="flex items-center gap-2">
+                    <IconCheck className="text-primary size-4 shrink-0" />
                     {item}
                   </li>
                 ))}
@@ -580,7 +839,7 @@ export function Faq() {
           </h2>
         </Reveal>
 
-        <div className="mt-12 divide-y rounded-2xl border">
+        <div className="bg-card/60 mt-12 divide-y rounded-2xl border backdrop-blur">
           {FAQS.map((faq, index) => {
             const expanded = open === index
             return (
@@ -601,9 +860,7 @@ export function Faq() {
                 </button>
                 <div
                   className="grid transition-all duration-300"
-                  style={{
-                    gridTemplateRows: expanded ? "1fr" : "0fr",
-                  }}
+                  style={{ gridTemplateRows: expanded ? "1fr" : "0fr" }}
                 >
                   <div className="overflow-hidden">
                     <p className="text-muted-foreground px-5 pb-5 text-sm leading-relaxed">
@@ -626,8 +883,8 @@ export function Faq() {
 
 export function CallToAction() {
   return (
-    <section className="relative overflow-hidden py-20">
-      <GradientField />
+    <section className="relative overflow-hidden py-24">
+      <SectionGlow />
       <div className="relative mx-auto max-w-3xl px-4 text-center">
         <Reveal>
           <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
@@ -638,15 +895,13 @@ export function CallToAction() {
             before lunch. Verification only matters when you are ready for
             real money.
           </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Button size="lg" asChild>
-              <Link href="/auth/register">
-                Anza bure
-                <IconArrowRight className="size-4" />
-              </Link>
+          <div className="mt-9 flex flex-wrap justify-center gap-3">
+            <Button size="lg" render={<Link href="/auth/register" />}>
+              Get started free
+              <IconArrowRight />
             </Button>
-            <Button size="lg" variant="outline" asChild>
-              <Link href="/docs">Read the docs</Link>
+            <Button size="lg" variant="outline" render={<Link href="/docs" />}>
+              Read the docs
             </Button>
           </div>
         </Reveal>
@@ -655,75 +910,6 @@ export function CallToAction() {
   )
 }
 
-// --------------------------------------------------------------------------
-// Footer
-// --------------------------------------------------------------------------
-
-const FOOTER = [
-  {
-    heading: "Product",
-    links: [
-      { label: "Features", href: "#features" },
-      { label: "Pricing", href: "#pricing" },
-      { label: "Payment links", href: "#features" },
-    ],
-  },
-  {
-    heading: "Developers",
-    links: [
-      { label: "Documentation", href: "/docs" },
-      { label: "Quickstart", href: "/docs/quickstart" },
-      { label: "API reference", href: "/docs/charges" },
-      { label: "Webhooks", href: "/docs/webhooks" },
-    ],
-  },
-  {
-    heading: "Account",
-    links: [
-      { label: "Sign in", href: "/auth" },
-      { label: "Create account", href: "/auth/register" },
-      { label: "Dashboard", href: "/dashboard" },
-    ],
-  },
-]
-
-export function SiteFooter() {
-  return (
-    <footer className="border-t py-12">
-      <div className="mx-auto max-w-6xl px-4">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          <div>
-            <p className="text-lg font-semibold tracking-tight">XerinPay</p>
-            <p className="text-muted-foreground mt-2 max-w-xs text-sm">
-              A payment aggregator for Tanzania. One API, one dashboard, every
-              network.
-            </p>
-          </div>
-
-          {FOOTER.map((group) => (
-            <div key={group.heading}>
-              <p className="text-sm font-medium">{group.heading}</p>
-              <ul className="mt-3 space-y-2">
-                {group.links.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="text-muted-foreground hover:text-foreground text-sm transition-colors"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-
-        <div className="text-muted-foreground mt-10 flex flex-wrap items-center justify-between gap-4 border-t pt-6 text-xs">
-          <p>© {new Date().getFullYear()} XerinPay. Dar es Salaam, Tanzania.</p>
-          <p>Amounts in TZS. Payments processed via licensed providers.</p>
-        </div>
-      </div>
-    </footer>
-  )
-}
+// The footer lives in components/marketing/site-footer.tsx. It grew a live
+// provider-status check and the legal drawers, neither of which belongs in
+// a file of static page sections.

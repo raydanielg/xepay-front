@@ -45,13 +45,12 @@ export function DashboardSidebar() {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              <Link href="/dashboard">
+            <SidebarMenuButton size="lg" render={<Link href="/dashboard" />}>
                 <Image
-                  src="/assets/XERIN icon-09 (1).png"
-                  alt=""
-                  width={28}
-                  height={28}
+                  src="/assets/XERIN PAY LOGO-12-12.svg"
+                  alt="XerinPay"
+                  width={160}
+                  height={42}
                   className="shrink-0"
                 />
                 <div className="grid flex-1 text-left leading-tight">
@@ -66,7 +65,6 @@ export function DashboardSidebar() {
                     </span>
                   ) : null}
                 </div>
-              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -94,14 +92,12 @@ export function DashboardSidebar() {
                     return (
                       <SidebarMenuItem key={item.url}>
                         <SidebarMenuButton
-                          asChild
+                          render={<Link href={item.url} />}
                           isActive={active}
                           tooltip={item.description ?? item.title}
                         >
-                          <Link href={item.url}>
                             <item.icon />
                             <span>{item.title}</span>
-                          </Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
                     )
@@ -117,8 +113,7 @@ export function DashboardSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton size="lg">
+              <DropdownMenuTrigger render={<SidebarMenuButton size="lg" />}>
                   <div className="bg-primary/10 text-primary flex size-8 shrink-0 items-center justify-center rounded-full text-xs font-medium">
                     {initials(session?.user.full_name ?? session?.user.email)}
                   </div>
@@ -134,7 +129,6 @@ export function DashboardSidebar() {
                     </span>
                   </div>
                   <IconSelector className="ml-auto size-4" />
-                </SidebarMenuButton>
               </DropdownMenuTrigger>
 
               <DropdownMenuContent side="top" align="start" className="w-56">
@@ -157,8 +151,8 @@ export function DashboardSidebar() {
                   </div>
                 </div>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/dashboard/settings">Account settings</Link>
+                <DropdownMenuItem render={<Link href="/dashboard/settings" />}>
+                  Account settings
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => void signOut()}>

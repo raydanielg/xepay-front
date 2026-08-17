@@ -53,71 +53,74 @@
 
 :root {
     --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
+    --foreground: oklch(0.141 0.005 285.823);
     --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
+    --card-foreground: oklch(0.141 0.005 285.823);
     --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
+    --popover-foreground: oklch(0.141 0.005 285.823);
     --primary: oklch(0.553 0.195 38.402);
     --primary-foreground: oklch(0.98 0.016 73.684);
     --secondary: oklch(0.967 0.001 286.375);
     --secondary-foreground: oklch(0.21 0.006 285.885);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
+    --muted: oklch(0.967 0.001 286.375);
+    --muted-foreground: oklch(0.552 0.016 285.938);
+    --accent: oklch(0.967 0.001 286.375);
+    --accent-foreground: oklch(0.21 0.006 285.885);
     --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
-    --chart-1: oklch(0.879 0.169 91.605);
-    --chart-2: oklch(0.769 0.188 70.08);
-    --chart-3: oklch(0.666 0.179 58.318);
-    --chart-4: oklch(0.555 0.163 48.998);
-    --chart-5: oklch(0.473 0.137 46.201);
-    --radius: 0.45rem;
+    --border: oklch(0.92 0.004 286.32);
+    --input: oklch(0.92 0.004 286.32);
+    --ring: oklch(0.705 0.015 286.067);
+    /* Charts are green while the brand is orange. That is deliberate:
+       chart series need to read as data, not as brand, and an orange bar
+       next to an orange primary button competes for the same attention. */
+    --chart-1: oklch(0.897 0.196 126.665);
+    --chart-2: oklch(0.768 0.233 130.85);
+    --chart-3: oklch(0.648 0.2 131.684);
+    --chart-4: oklch(0.532 0.157 131.589);
+    --chart-5: oklch(0.453 0.124 130.933);
+    --radius: 0.625rem;
     --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
+    --sidebar-foreground: oklch(0.141 0.005 285.823);
     --sidebar-primary: oklch(0.646 0.222 41.116);
     --sidebar-primary-foreground: oklch(0.98 0.016 73.684);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.708 0 0);
+    --sidebar-accent: oklch(0.967 0.001 286.375);
+    --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
+    --sidebar-border: oklch(0.92 0.004 286.32);
+    --sidebar-ring: oklch(0.705 0.015 286.067);
 }
 
 .dark {
-    --background: oklch(0.145 0 0);
+    --background: oklch(0.141 0.005 285.823);
     --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
+    --card: oklch(0.21 0.006 285.885);
     --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.205 0 0);
+    --popover: oklch(0.21 0.006 285.885);
     --popover-foreground: oklch(0.985 0 0);
     --primary: oklch(0.47 0.157 37.304);
     --primary-foreground: oklch(0.98 0.016 73.684);
     --secondary: oklch(0.274 0.006 286.033);
     --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
+    --muted: oklch(0.274 0.006 286.033);
+    --muted-foreground: oklch(0.705 0.015 286.067);
+    --accent: oklch(0.274 0.006 286.033);
     --accent-foreground: oklch(0.985 0 0);
     --destructive: oklch(0.704 0.191 22.216);
     --border: oklch(1 0 0 / 10%);
     --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.556 0 0);
-    --chart-1: oklch(0.879 0.169 91.605);
-    --chart-2: oklch(0.769 0.188 70.08);
-    --chart-3: oklch(0.666 0.179 58.318);
-    --chart-4: oklch(0.555 0.163 48.998);
-    --chart-5: oklch(0.473 0.137 46.201);
-    --sidebar: oklch(0.205 0 0);
+    --ring: oklch(0.552 0.016 285.938);
+    --chart-1: oklch(0.897 0.196 126.665);
+    --chart-2: oklch(0.768 0.233 130.85);
+    --chart-3: oklch(0.648 0.2 131.684);
+    --chart-4: oklch(0.532 0.157 131.589);
+    --chart-5: oklch(0.453 0.124 130.933);
+    --sidebar: oklch(0.21 0.006 285.885);
     --sidebar-foreground: oklch(0.985 0 0);
     --sidebar-primary: oklch(0.705 0.213 47.604);
     --sidebar-primary-foreground: oklch(0.98 0.016 73.684);
-    --sidebar-accent: oklch(0.269 0 0);
+    --sidebar-accent: oklch(0.274 0.006 286.033);
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.556 0 0);
+    --sidebar-ring: oklch(0.552 0.016 285.938);
 }
 
 @layer base {
@@ -161,6 +164,11 @@
   to   { transform: translateX(-100%); }
 }
 
+@keyframes xerin-marquee-y {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-100%); }
+}
+
 @keyframes xerin-drift {
   0%, 100% { transform: translate(0, 0) scale(1); }
   33%      { transform: translate(28px, -22px) scale(1.06); }
@@ -183,6 +191,65 @@
 @keyframes xerin-shimmer {
   from { background-position: -200% 0; }
   to   { background-position: 200% 0; }
+}
+
+/* Background dots. Transform and opacity only, so this stays on the
+   compositor and never causes a repaint. */
+@keyframes xerin-float {
+  0%, 100% { transform: translateY(0) scale(1);      opacity: 0.35; }
+  50%      { transform: translateY(-26px) scale(1.3); opacity: 0.8; }
+}
+
+/* Concentric rings radiating outward behind the hero. Scale rather than
+   width/height so this never triggers layout. */
+@keyframes xerin-ring {
+  0%   { transform: scale(0.72); opacity: 0; }
+  18%  { opacity: 0.5; }
+  100% { transform: scale(1.28); opacity: 0; }
+}
+
+/* Hero image entrance. */
+@keyframes xerin-rise {
+  from { opacity: 0; transform: translateY(28px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* --------------------------------------------------------------------------
+   3D. These rely on transform-style: preserve-3d on the animated element,
+   which is set inline where they are used.
+   -------------------------------------------------------------------------- */
+
+/* Holds each face still long enough to be read before turning. */
+@keyframes xerin-card-spin {
+  0%, 38%   { transform: rotateY(0deg); }
+  50%, 88%  { transform: rotateY(180deg); }
+  100%      { transform: rotateY(360deg); }
+}
+
+/* Rotates the orbit ring about its own axis while keeping the X tilt. */
+@keyframes xerin-orbit {
+  from { transform: rotateX(66deg) rotateZ(0deg); }
+  to   { transform: rotateX(66deg) rotateZ(360deg); }
+}
+
+/* Applied to each orbiting node so it cancels the ring's Z rotation and
+   stays upright. Must run at the same duration as xerin-orbit. */
+@keyframes xerin-counter-orbit {
+  from { transform: rotateZ(0deg); }
+  to   { transform: rotateZ(-360deg); }
+}
+
+/* Page transition on route change. */
+@keyframes xerin-page-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Typewriter caret. `steps(2, start)` gives a hard on/off blink rather than
+   a fade, which is what a real terminal caret does. */
+@keyframes xerin-caret {
+  0%, 49%   { opacity: 1; }
+  50%, 100% { opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {

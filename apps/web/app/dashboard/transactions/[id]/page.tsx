@@ -79,11 +79,9 @@ function TransactionDetail({ id }: { id: string }) {
 
   return (
     <>
-      <Button variant="ghost" size="sm" className="w-fit" asChild>
-        <Link href="/dashboard/transactions">
-          <IconArrowLeft className="size-4" />
-          Back to transactions
-        </Link>
+      <Button variant="ghost" size="sm" className="w-fit" render={<Link href="/dashboard/transactions" />}>
+        <IconArrowLeft className="size-4" />
+        Back to transactions
       </Button>
 
       <PageHeader

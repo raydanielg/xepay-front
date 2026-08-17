@@ -113,7 +113,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <img
                 src="/assets/XERIN PAY LOGO-12-12.svg"
                 alt="XerinPay"
-                className="h-10 w-auto"
+                className="h-12 w-auto"
               />
               <span className="text-base font-semibold">XerinPay</span>
             </SidebarMenuButton>

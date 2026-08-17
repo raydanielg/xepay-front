@@ -45,21 +45,20 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
 
           <Link href="/docs" className="flex items-center gap-2">
             <Image
-              src="/assets/XERIN icon-09 (1).png"
-              alt=""
-              width={24}
-              height={24}
+              src="/assets/XERIN PAY LOGO-12-12.svg"
+              alt="XerinPay"
+              width={160}
+              height={42}
+              className="h-10 w-auto object-contain"
             />
             <span className="font-semibold">XerinPay</span>
             <span className="text-muted-foreground text-sm">Docs</span>
           </Link>
 
           <div className="ml-auto flex items-center gap-2">
-            <Button variant="ghost" size="sm" asChild>
-              <Link href="/dashboard">
-                <IconArrowLeft className="size-4" />
-                Dashboard
-              </Link>
+            <Button variant="ghost" size="sm" render={<Link href="/dashboard" />}>
+              <IconArrowLeft className="size-4" />
+              Dashboard
             </Button>
           </div>
         </div>

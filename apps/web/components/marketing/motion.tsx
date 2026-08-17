@@ -72,39 +72,45 @@ const OFFSETS: Record<Direction, string> = {
   none: "none",
 }
 
-/** Fade and slide content in as it enters the viewport. */
+/**
+ * Fade and slide content in as it enters the viewport.
+ *
+ * Deliberately not polymorphic. A generic `as` prop plus a forwarded ref is
+ * a lot of type machinery for a wrapper div, and every use here is a div.
+ */
 export function Reveal({
   children,
   direction = "up",
   delay = 0,
   className,
-  as: Tag = "div",
 }: {
   children: React.ReactNode
   direction?: Direction
   /** Milliseconds. Use to stagger siblings. */
   delay?: number
   className?: string
-  as?: React.ElementType
 }) {
   const { ref, inView } = useInView<HTMLDivElement>()
   const reduced = usePrefersReducedMotion()
+  const visible = inView || reduced
 
   return (
-    <Tag
+    <div
       ref={ref}
       className={className}
       style={{
-        opacity: inView || reduced ? 1 : 0,
-        transform: inView || reduced ? "none" : OFFSETS[direction],
+        opacity: visible ? 1 : 0,
+        transform: visible ? "none" : OFFSETS[direction],
         transition: reduced
           ? "none"
           : `opacity 620ms cubic-bezier(0.16,1,0.3,1) ${delay}ms, transform 620ms cubic-bezier(0.16,1,0.3,1) ${delay}ms`,
-        willChange: reduced ? undefined : "opacity, transform",
+        // Dropped once the animation is done so we do not keep a layer
+        // promoted for every revealed block on a long page.
+        willChange: reduced || visible ? undefined : "opacity, transform",
       }}
     >
       {children}
-    </Tag>
+    </div>
   )
 }
 
@@ -232,6 +238,58 @@ export function Marquee({
           className="flex shrink-0 items-center gap-12 pr-12 group-hover:[animation-play-state:paused]"
           style={{
             animation: `xerin-marquee ${speed}s linear infinite`,
+          }}
+        >
+          {children}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+/**
+ * Continuous vertical scroll. Same seamless-loop trick as `Marquee`, but on
+ * the Y axis.
+ *
+ * Reads as a live feed of everything reachable, which is the point of the
+ * section it sits in. Paused on hover so a visitor can read a name they
+ * recognised.
+ */
+export function VerticalMarquee({
+  children,
+  speed = 26,
+  reverse = false,
+  className,
+}: {
+  children: React.ReactNode
+  /** Seconds for one full pass. */
+  speed?: number
+  /** Scroll downward instead of upward. */
+  reverse?: boolean
+  className?: string
+}) {
+  const reduced = usePrefersReducedMotion()
+
+  if (reduced) {
+    return <div className={cn("flex flex-col gap-3", className)}>{children}</div>
+  }
+
+  return (
+    <div
+      className={cn(
+        "group relative flex flex-col overflow-hidden",
+        "[mask-image:linear-gradient(to_bottom,transparent,black_14%,black_86%,transparent)]",
+        className,
+      )}
+    >
+      {[0, 1].map((copy) => (
+        <div
+          key={copy}
+          aria-hidden={copy === 1}
+          className="flex shrink-0 flex-col gap-3 pb-3 group-hover:[animation-play-state:paused]"
+          style={{
+            animation: `xerin-marquee-y ${speed}s linear infinite`,
+            animationDirection: reverse ? "reverse" : "normal",
           }}
         >
           {children}
