@@ -13,10 +13,12 @@ import {
 import { Input } from "@workspace/ui/components/input"
 import { Spinner } from "@workspace/ui/components/spinner"
 import { LegalDrawers } from "@/components/legal-drawers"
+import { ApiError, api } from "@/lib/api"
 import Image from "next/image"
 import Link from "next/link"
 import {
   IconAlertCircle,
+  IconBuildingStore,
   IconEye,
   IconEyeOff,
   IconMail,
@@ -30,6 +32,7 @@ export function RegisterForm({
   ...props
 }: React.ComponentProps<"div">) {
   const [fullName, setFullName] = useState("")
+  const [businessName, setBusinessName] = useState("")
   const [email, setEmail] = useState("")
   const [phone, setPhone] = useState("")
   const [password, setPassword] = useState("")
@@ -64,17 +67,24 @@ export function RegisterForm({
     setLoading(true)
 
     try {
-      // TODO: Replace with actual XerinPay auth service
-      console.log("Register:", {
+      // Signing up creates the merchant account as well as the login, and
+      // makes this person its owner. `business_name` falls back to their
+      // name server-side when it isn't given.
+      await api.register({
         full_name: fullName,
         email,
         password,
+        password_confirmation: passwordConfirmation,
         phone: phone ? `255${phone}` : undefined,
+        business_name: businessName || undefined,
       })
       window.location.href = "/dashboard"
-    } catch {
-      setError("Registration failed. Please try again.")
-    } finally {
+    } catch (err) {
+      setError(
+        err instanceof ApiError
+          ? err.message
+          : "Could not create your account. Please try again.",
+      )
       setLoading(false)
     }
   }
@@ -90,13 +100,13 @@ export function RegisterForm({
               <div className="flex flex-col items-center gap-4 text-center">
                 <div className="flex items-center gap-3">
                   <Image
-                    src="/assets/XERIN express-09 (1).png"
+                    src="/assets/XERIN PAY LOGO-12-12.svg"
                     alt="XerinPay Logo"
                     width={0}
                     height={0}
                     sizes="64px"
                     className="object-contain"
-                    style={{ width: "auto", height: "64px" }}
+                    style={{ width: "auto", height: "96px" }}
                     priority
                   />
                 </div>
@@ -133,6 +143,27 @@ export function RegisterForm({
                     className="h-11 pl-10 text-sm"
                   />
                 </div>
+              </Field>
+
+              {/* Business Name — creates the merchant account this person owns */}
+              <Field>
+                <FieldLabel htmlFor="business_name" className="text-sm font-medium">Business Name</FieldLabel>
+                <div className="relative">
+                  <IconBuildingStore className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
+                  <Input
+                    id="business_name"
+                    type="text"
+                    placeholder="Duka la Mama Asha"
+                    value={businessName}
+                    onChange={(e) => setBusinessName(e.target.value)}
+                    disabled={loading}
+                    autoComplete="organization"
+                    className="h-11 pl-10 text-sm"
+                  />
+                </div>
+                <FieldDescription>
+                  Optional. We&apos;ll use your own name if you leave this blank.
+                </FieldDescription>
               </Field>
 
               {/* Email */}

@@ -22,9 +22,9 @@ export const metadata = {
   title: "XerinPay",
   description: "XerinPay - Secure payment platform",
   icons: {
-    icon: "/favicon.png",
-    apple: "/favicon.png",
-    shortcut: "/favicon.png",
+    icon: "/assets/XERIN PAY LOGO-12-12.svg",
+    apple: "/assets/XERIN PAY LOGO-12-12.svg",
+    shortcut: "/assets/XERIN PAY LOGO-12-12.svg",
   },
 }
 

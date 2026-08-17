@@ -143,3 +143,55 @@
     cursor: pointer;
     }
 }
+
+/* --------------------------------------------------------------------------
+   Marketing animations
+   --------------------------------------------------------------------------
+   Kept as raw keyframes rather than Tailwind utilities because they are
+   referenced from inline styles in components/marketing/motion.tsx, where a
+   utility class would be purged.
+
+   Every animation below is suppressed under prefers-reduced-motion at the
+   bottom of this block. Motion is decoration; content must never depend on
+   it to be readable.
+   -------------------------------------------------------------------------- */
+
+@keyframes xerin-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-100%); }
+}
+
+@keyframes xerin-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%      { transform: translate(28px, -22px) scale(1.06); }
+  66%      { transform: translate(-20px, 18px) scale(0.96); }
+}
+
+/* The pulse that travels along the payment-flow diagram in the hero. */
+@keyframes xerin-pulse-along {
+  0%       { offset-distance: 0%;   opacity: 0; }
+  8%       { opacity: 1; }
+  92%      { opacity: 1; }
+  100%     { offset-distance: 100%; opacity: 0; }
+}
+
+@keyframes xerin-ripple {
+  0%   { transform: scale(0.85); opacity: 0.55; }
+  100% { transform: scale(2.2);  opacity: 0; }
+}
+
+@keyframes xerin-shimmer {
+  from { background-position: -200% 0; }
+  to   { background-position: 200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

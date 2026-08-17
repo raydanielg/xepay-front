@@ -13,6 +13,7 @@ import {
 import { Input } from "@workspace/ui/components/input"
 import { Spinner } from "@workspace/ui/components/spinner"
 import { LegalDrawers } from "@/components/legal-drawers"
+import { ApiError, api } from "@/lib/api"
 import Image from "next/image"
 import Link from "next/link"
 import {
@@ -32,6 +33,9 @@ export function AuthForm({
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [needsTotp, setNeedsTotp] = useState(false)
+  const [totpCode, setTotpCode] = useState("")
+  const [recoveryAvailable, setRecoveryAvailable] = useState(false)
 
   const slideshowImages = [
     "/assets/44405.jpg",
@@ -55,12 +59,25 @@ export function AuthForm({
     setLoading(true)
 
     try {
-      // TODO: Replace with actual XerinPay auth service
-      console.log("Login:", { email, password })
+      const result = await api.login(email, password, totpCode || undefined)
+
+      if (result.totpRequired) {
+        // Password was correct; we're now asking for the second factor.
+        setNeedsTotp(true)
+        setRecoveryAvailable(result.recoveryAvailable)
+        setLoading(false)
+        return
+      }
+
+      // Full navigation rather than router.push: it guarantees the session
+      // provider mounts fresh and reads the token we just stored.
       window.location.href = "/dashboard"
-    } catch {
-      setError("Login failed. Please check your credentials.")
-    } finally {
+    } catch (err) {
+      setError(
+        err instanceof ApiError
+          ? err.message
+          : "Could not sign in. Please check your connection and try again.",
+      )
       setLoading(false)
     }
   }
@@ -76,13 +93,13 @@ export function AuthForm({
               <div className="flex flex-col items-center gap-4 text-center">
                 <div className="flex items-center gap-3">
                   <Image
-                    src="/assets/XERIN express-09 (1).png"
+                    src="/assets/XERIN PAY LOGO-12-12.svg"
                     alt="XerinPay Logo"
                     width={0}
                     height={0}
                     sizes="64px"
                     className="object-contain"
-                    style={{ width: "auto", height: "64px" }}
+                    style={{ width: "auto", height: "96px" }}
                     priority
                   />
                 </div>
@@ -161,6 +178,36 @@ export function AuthForm({
                   </button>
                 </div>
               </Field>
+
+              {/* Second factor. Only appears after the password is accepted. */}
+              {needsTotp && (
+                <Field>
+                  <FieldLabel htmlFor="totp" className="text-sm font-medium">
+                    Authentication code
+                  </FieldLabel>
+                  <Input
+                    id="totp"
+                    inputMode="numeric"
+                    autoFocus
+                    required
+                    value={totpCode}
+                    onChange={(e) =>
+                      setTotpCode(
+                        e.target.value.replace(/[^0-9A-Za-z-]/g, "").toUpperCase(),
+                      )
+                    }
+                    placeholder="000000"
+                    disabled={loading}
+                    autoComplete="one-time-code"
+                    className="h-11 text-sm font-mono tracking-widest"
+                  />
+                  <FieldDescription>
+                    {recoveryAvailable
+                      ? "Enter the 6-digit code from your app, or one of your recovery codes."
+                      : "Enter the 6-digit code from your authenticator app."}
+                  </FieldDescription>
+                </Field>
+              )}
 
               {/* Submit */}
               <Field>

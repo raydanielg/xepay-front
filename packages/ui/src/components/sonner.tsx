@@ -46,4 +46,10 @@ const Toaster = ({ ...props }: ToasterProps) => {
   )
 }
 
+// Re-exported so callers have one import surface for toasts: importing
+// `Toaster` from the workspace package but `toast` from the `sonner`
+// package directly is easy to get wrong, and the mistake only shows up at
+// build time.
+export { toast } from "sonner"
+
 export { Toaster }

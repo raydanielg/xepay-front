@@ -58,13 +58,13 @@ export function ForgotPasswordForm({
                   <div className="flex flex-col gap-4">
                     <div className="flex items-center gap-3">
                       <Image
-                        src="/assets/XERIN express-09 (1).png"
+                        src="/assets/XERIN PAY LOGO-12-12.svg"
                         alt="XerinPay Logo"
                         width={0}
                         height={0}
                         sizes="64px"
                         className="object-contain"
-                        style={{ width: "auto", height: "64px" }}
+                        style={{ width: "auto", height: "96px" }}
                         priority
                       />
                     </div>

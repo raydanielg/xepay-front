@@ -14,7 +14,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@workspace/ui/components/sidebar"
-import { IconDashboard, IconChartBar, IconUsers, IconSettings, IconHelp, IconSearch, IconInnerShadowTop, IconWallet, IconReceipt, IconArrowsRightLeft } from "@tabler/icons-react"
+import { IconDashboard, IconChartBar, IconUsers, IconSettings, IconHelp, IconSearch, IconWallet, IconReceipt, IconArrowsRightLeft } from "@tabler/icons-react"
 
 const data = {
   user: {
@@ -108,9 +108,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton
               className="data-[slot=sidebar-menu-button]:p-1.5!"
-              render={<a href="#" />}
+              render={<a href="/dashboard" />}
             >
-              <IconInnerShadowTop className="size-5!" />
+              <img
+                src="/assets/XERIN PAY LOGO-12-12.svg"
+                alt="XerinPay"
+                className="h-10 w-auto"
+              />
               <span className="text-base font-semibold">XerinPay</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
